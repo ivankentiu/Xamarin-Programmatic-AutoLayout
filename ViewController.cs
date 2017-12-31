@@ -6,11 +6,19 @@ using UIKit;
 
 namespace autolayout
 {
+    
+    public static class UIColorExtensions
+    {
+        public static UIColor mainPink = new UIColor(red: 232f / 255f, green: 68f / 255f, blue: 133f / 255f, alpha: 1f);
+    }
+
     public class ViewController : UIViewController
     {
         UIView topImageContainerView;
         UIImageView bearImageView;
         UITextView descriptionTextView;
+        UIButton previousButton, nextButton;
+        UIPageControl pageControl;
 
         internal ViewController()
         {
@@ -53,7 +61,25 @@ namespace autolayout
                 ScrollEnabled = false
             };
 
+            previousButton = UIButton.FromType(UIButtonType.System);
+            previousButton.TitleLabel.Font = UIFont.BoldSystemFontOfSize(14);
+            previousButton.SetTitleColor(UIColor.Gray, UIControlState.Normal);
+            previousButton.SetTitle("PREV", UIControlState.Normal);
+            previousButton.TranslatesAutoresizingMaskIntoConstraints = false;
 
+            nextButton = UIButton.FromType(UIButtonType.System);
+            nextButton.TitleLabel.Font = UIFont.BoldSystemFontOfSize(14);
+            nextButton.SetTitleColor(UIColorExtensions.mainPink, UIControlState.Normal);
+            nextButton.SetTitle("NEXT", UIControlState.Normal);
+            nextButton.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            pageControl = new UIPageControl()
+            {
+                CurrentPage = 0,
+                Pages = 4,
+                CurrentPageIndicatorTintColor = UIColorExtensions.mainPink,
+                PageIndicatorTintColor = new UIColor(red: 249f / 255f, green: 207f / 255f, blue: 224f / 255f, alpha: 1f)
+            };
         }
 
         public override void ViewDidLoad()
@@ -64,7 +90,48 @@ namespace autolayout
             View.AddSubview(descriptionTextView);
             View.AddSubview(topImageContainerView);
             topImageContainerView.AddSubview(bearImageView);
+            SetupBottomControls();
             SetupLayout();
+        }
+
+        private void SetupBottomControls()
+        {
+            //View.AddSubview(previousButton);
+            //previousButton.BackgroundColor = UIColor.Red;
+            //previousButton.Frame = new CGRect(0, 0, 200, 50);
+
+            //var yellowView = new UIView()
+            //{
+            //    BackgroundColor = UIColor.Yellow
+            //};
+
+            //var greenView = new UIView()
+            //{
+            //    BackgroundColor = UIColor.Green
+            //};
+
+            //var blueView = new UIView()
+            //{
+            //    BackgroundColor = UIColor.Blue
+            //};
+
+            var bottomControlsStackView = new UIStackView(new UIView[] { previousButton, pageControl, nextButton })
+            {
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                Distribution = UIStackViewDistribution.FillEqually,
+                Axis = UILayoutConstraintAxis.Horizontal
+            };
+
+            View.AddSubview(bottomControlsStackView);
+
+            // shorter way instead of setting them 1 by 1
+            NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[] {
+                //previousButton.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor),
+                bottomControlsStackView.BottomAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.BottomAnchor),
+                bottomControlsStackView.LeadingAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.LeadingAnchor),
+                bottomControlsStackView.TrailingAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TrailingAnchor),
+                bottomControlsStackView.HeightAnchor.ConstraintEqualTo(50)
+            });
         }
 
         private void SetupLayout()
