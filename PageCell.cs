@@ -8,8 +8,34 @@ namespace autolayout
     public class PageCell : UICollectionViewCell
     {
         UIView topImageContainerView;
-        UIImageView bearImageView;
-        UITextView descriptionTextView;
+        public UIImageView bearImageView;
+        public UITextView descriptionTextView;
+
+        private Page _myPage;
+        public Page MyPage
+        {
+            get { return _myPage; }
+            set
+            {
+                _myPage = value;
+                bearImageView.Image = UIImage.FromBundle(_myPage.imageName);
+
+                var attributedText = new NSMutableAttributedString(
+                    _myPage.headerText,
+                    font: UIFont.BoldSystemFontOfSize(18)
+                );
+
+                var subtitleAttributedText = new NSAttributedString(
+                    String.Format("\n\n\n{0}", _myPage.bodyText),
+                    font: UIFont.BoldSystemFontOfSize(13),
+                    foregroundColor: UIColor.Gray
+                );
+
+                attributedText.Append(subtitleAttributedText);
+                descriptionTextView.AttributedText = attributedText;
+                descriptionTextView.TextAlignment = UITextAlignment.Center;
+            }
+        }
 
 
         [Export("initWithFrame:")]
