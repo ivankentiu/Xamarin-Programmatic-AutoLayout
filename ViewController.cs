@@ -6,7 +6,7 @@ using UIKit;
 
 namespace autolayout
 {
-    
+
     public static class UIColorExtensions
     {
         public static UIColor mainPink = new UIColor(red: 232f / 255f, green: 68f / 255f, blue: 133f / 255f, alpha: 1f);
@@ -20,7 +20,7 @@ namespace autolayout
         UIButton previousButton, nextButton;
         UIPageControl pageControl;
 
-        internal ViewController()
+        public ViewController()
         {
             topImageContainerView = new UIView()
             {

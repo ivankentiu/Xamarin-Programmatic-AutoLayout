@@ -19,8 +19,12 @@ namespace autolayout
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
-            Window.RootViewController = new ViewController();
             Window.MakeKeyAndVisible();
+
+            var layout = new UICollectionViewFlowLayout();
+            layout.ScrollDirection = UICollectionViewScrollDirection.Horizontal;
+            var swipingController = new SwipingController(layout);
+            Window.RootViewController = swipingController;
 
             return true;
         }
