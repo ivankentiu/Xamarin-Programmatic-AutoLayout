@@ -96,25 +96,6 @@ namespace autolayout
 
         private void SetupBottomControls()
         {
-            //View.AddSubview(previousButton);
-            //previousButton.BackgroundColor = UIColor.Red;
-            //previousButton.Frame = new CGRect(0, 0, 200, 50);
-
-            //var yellowView = new UIView()
-            //{
-            //    BackgroundColor = UIColor.Yellow
-            //};
-
-            //var greenView = new UIView()
-            //{
-            //    BackgroundColor = UIColor.Green
-            //};
-
-            //var blueView = new UIView()
-            //{
-            //    BackgroundColor = UIColor.Blue
-            //};
-
             var bottomControlsStackView = new UIStackView(new UIView[] { previousButton, pageControl, nextButton })
             {
                 TranslatesAutoresizingMaskIntoConstraints = false,

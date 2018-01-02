@@ -7,9 +7,9 @@ namespace autolayout
 {
     public class PageCell : UICollectionViewCell
     {
-        UIView topImageContainerView;
-        public UIImageView bearImageView;
-        public UITextView descriptionTextView;
+        private readonly UIView topImageContainerView;
+        private readonly UIImageView bearImageView;
+        private readonly UITextView descriptionTextView;
 
         private Page _myPage;
         public Page MyPage
@@ -18,22 +18,7 @@ namespace autolayout
             set
             {
                 _myPage = value;
-                bearImageView.Image = UIImage.FromBundle(_myPage.imageName);
-
-                var attributedText = new NSMutableAttributedString(
-                    _myPage.headerText,
-                    font: UIFont.BoldSystemFontOfSize(18)
-                );
-
-                var subtitleAttributedText = new NSAttributedString(
-                    String.Format("\n\n\n{0}", _myPage.bodyText),
-                    font: UIFont.BoldSystemFontOfSize(13),
-                    foregroundColor: UIColor.Gray
-                );
-
-                attributedText.Append(subtitleAttributedText);
-                descriptionTextView.AttributedText = attributedText;
-                descriptionTextView.TextAlignment = UITextAlignment.Center;
+                UpdateTextOnPage();
             }
         }
 
@@ -55,25 +40,10 @@ namespace autolayout
                 ContentMode = UIViewContentMode.ScaleAspectFit
             };
 
-
-            var attributedText = new NSMutableAttributedString(
-                "Join us today in our fun and games!",
-                font: UIFont.BoldSystemFontOfSize(18)
-            );
-
-            var subtitleAttributedText = new NSAttributedString(
-                "\n\n\nAre you ready for loads and loads of fun? Don't wait any longer! We hope to see you in our stores soon.",
-                font: UIFont.BoldSystemFontOfSize(13),
-                foregroundColor: UIColor.Gray
-            );
-
-            attributedText.Append(subtitleAttributedText);
-
             descriptionTextView = new UITextView()
             {
                 //Text = "Join us today in our fun and games!",
                 //Font = UIFont.BoldSystemFontOfSize(18),
-                AttributedText = attributedText,
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 TextAlignment = UITextAlignment.Center,
                 Editable = false,
@@ -84,6 +54,26 @@ namespace autolayout
             AddSubview(topImageContainerView);
             topImageContainerView.AddSubview(bearImageView);
             SetupLayout();
+        }
+
+        private void UpdateTextOnPage()
+        {
+            bearImageView.Image = UIImage.FromBundle(_myPage.ImageName);
+
+            var attributedText = new NSMutableAttributedString(
+                _myPage.HeaderText,
+                font: UIFont.BoldSystemFontOfSize(18)
+            );
+
+            var subtitleAttributedText = new NSAttributedString(
+                $"\n\n\n {_myPage.BodyText}",
+                font: UIFont.BoldSystemFontOfSize(13),
+                foregroundColor: UIColor.Gray
+            );
+
+            attributedText.Append(subtitleAttributedText);
+            descriptionTextView.AttributedText = attributedText;
+            descriptionTextView.TextAlignment = UITextAlignment.Center;
         }
 
         private void SetupLayout()
