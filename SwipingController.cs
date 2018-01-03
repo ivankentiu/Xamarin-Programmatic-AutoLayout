@@ -6,7 +6,7 @@ using Foundation;
 
 namespace autolayout
 {
-    public class SwipingController : UICollectionViewController
+    public partial class SwipingController : UICollectionViewController
     {
         private UIButton previousButton, nextButton;
         private UIPageControl pageControl;
@@ -16,25 +16,6 @@ namespace autolayout
             new Page {ImageName = "heart", HeaderText = "Subscribe and get coupons on our daily events", BodyText = "Get notified of the savings immediately when we announce them of our website. make sure to also give us any feedback you have." },
             new Page {ImageName = "leaf", HeaderText = "VIP members special services", BodyText = "we do the honors to serve you Cooooolll!" }
         };
-
-
-        public SwipingController(UICollectionViewFlowLayout layout) : base(layout)
-        {
-            CollectionView.Delegate = new CustomViewDelegate();
-        }
-
-        class CustomViewDelegate : UICollectionViewDelegateFlowLayout
-        {
-            public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, Foundation.NSIndexPath indexPath)
-            {
-                return new CGSize(collectionView.Frame.Width, collectionView.Frame.Height);
-            }
-
-            public override nfloat GetMinimumLineSpacingForSection(UICollectionView collectionView, UICollectionViewLayout layout, nint section)
-            {
-                return 0;
-            }
-        }
 
         private void SetupBottomControls()
         {
@@ -83,7 +64,7 @@ namespace autolayout
             });
         }
 
-        private void ButtonSetup(UIButton button,UIColor color, string text)
+        private void ButtonSetup(UIButton button, UIColor color, string text)
         {
             button.TitleLabel.Font = UIFont.BoldSystemFontOfSize(14);
             button.SetTitleColor(color, UIControlState.Normal);
@@ -99,13 +80,7 @@ namespace autolayout
             CollectionView.ScrollToItem(indexPath, UICollectionViewScrollPosition.CenteredHorizontally, true);
         }
 
-        public override void WillEndDragging(UIScrollView scrollView, CGPoint velocity, ref CGPoint targetContentOffset)
-        {
-            base.WillEndDragging(scrollView, velocity, ref targetContentOffset);
-            var x = targetContentOffset.X;
-            Console.WriteLine(x);
-            pageControl.CurrentPage = (int)(x / CollectionView.Frame.Width);
-        }
+
 
         public override void ViewDidLoad()
         {
@@ -117,19 +92,6 @@ namespace autolayout
             CollectionView.RegisterClassForCell(typeof(PageCell), "cellId");
             CollectionView.PagingEnabled = true;
         }
-
-        public override nint GetItemsCount(UICollectionView collectionView, nint section)
-        {
-            return pages.Length;
-        }
-
-        public override UICollectionViewCell GetCell(UICollectionView collectionView, Foundation.NSIndexPath indexPath)
-        {
-            var cell = collectionView.DequeueReusableCell("cellId", indexPath) as PageCell;
-            //cell.BackgroundColor = indexPath.Item % 2 == 0 ? UIColor.Red : UIColor.Green;
-            var page = pages[indexPath.Item];
-            cell.MyPage = page;
-            return cell;
-        }
+       
     }
 }
