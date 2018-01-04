@@ -1,6 +1,7 @@
 ﻿using System;
 using UIKit;
 using CoreGraphics;
+using Foundation;
 
 namespace autolayout
 {
@@ -8,21 +9,21 @@ namespace autolayout
     {
         public SwipingController(UICollectionViewFlowLayout layout) : base(layout)
         {
-            CollectionView.Delegate = new CustomViewDelegate();
+            CollectionView.Delegate = this;
         }
 
-        class CustomViewDelegate : UICollectionViewDelegateFlowLayout
+        [Export ("collectionView:layout:sizeForItemAtIndexPath:")]
+        public virtual CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, Foundation.NSIndexPath indexPath)
         {
-            public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, Foundation.NSIndexPath indexPath)
-            {
-                return new CGSize(collectionView.Frame.Width, collectionView.Frame.Height);
-            }
-
-            public override nfloat GetMinimumLineSpacingForSection(UICollectionView collectionView, UICollectionViewLayout layout, nint section)
-            {
-                return 0;
-            }
+            return new CGSize(collectionView.Frame.Width, collectionView.Frame.Height);
         }
+
+        [Export ("collectionView:layout:minimumLineSpacingForSectionAtIndex:")]
+        public virtual nfloat GetMinimumLineSpacingForSection(UICollectionView collectionView, UICollectionViewLayout layout, nint section)
+        {
+            return 0;
+        }
+
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
         {
@@ -40,10 +41,11 @@ namespace autolayout
 
         public override void WillEndDragging(UIScrollView scrollView, CGPoint velocity, ref CGPoint targetContentOffset)
         {
-            base.WillEndDragging(scrollView, velocity, ref targetContentOffset);
             var x = targetContentOffset.X;
             Console.WriteLine(x);
             pageControl.CurrentPage = (int)(x / CollectionView.Frame.Width);
         }
+
+       
     }
 }
